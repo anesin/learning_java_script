@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Simple HTML</title>
+        <style>
+            .callout {
+                border: solid 1px #ff0080;
+                margin: 2px 4px;
+                padding: 2px 6px;
+            }
+            .code {
+                background: #ccc;
+                margin: 1px 2px;
+                padding: 1px 4px;
+                font-family: monospace;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Chapter 19.7</h1>
+            <h1>Simple HTML</h1>
+        </header>
+        <div id="content">
+            <p>This is a <i>simple</i> HTML file.</p>
+            <div class="callout">
+                <p>This is as fancy as we'll get!</p>
+            </div>
+            <p>IDs (such as <span class="code">#content</span>) are unique (there can only be one per page).</p>
+            <p>Classes (such as <span class="code">.callout</span>) can be used on many elements.</p>
+            <div class="callout2" class="callout fancy">
+                <p>A single HTML element can have multiple classes.</p>
+            </div>
+        </div>
+        <div class="serverInfo">
+            Server is running on <span data-replace="platform">???</span>
+            with Node <span data-replace="nodeVersion">???</span>. It has
+            been up for <span data-replace="uptime">???</span> seconds.
+        </div>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            function refreshServerInfo() {
+                const $serverInfo = $('.serverInfo');
+                $.get('http://localhost:7070').then(
+                    function(data) {
+                        Object.keys(data).forEach(p => {
+                            $(`[data-replace="${p}"]`).text(data[p]);
+                        })
+                    },
+                    function(jqXHR, textStatus, err) {
+                        console.error(err);
+                        $serverInfo.addClass('error')
+                            .html('Error connecting to server.');
+                    }
+                );
+            }
+            // refreshServerInfo();
+            setInterval(refreshServerInfo, 1000);
+        </script>
+    </body>
+</html>
